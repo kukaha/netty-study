@@ -30,8 +30,9 @@ public class HeartBeatRespHandler extends ChannelInboundHandlerAdapter {
             LOG.info("Send heart beat response message to client : ---> "
                     + heartBeat);
             ctx.writeAndFlush(heartBeat);
-        } else
+        } else {
             ctx.fireChannelRead(msg);
+        }
     }
 
     private NettyMessage buildHeatBeat() {

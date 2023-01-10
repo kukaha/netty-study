@@ -34,8 +34,9 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
                 .getCode()) {
             LOG.info("Client receive server heart beat message : ---> "
                     + message);
-        } else
+        } else {
             ctx.fireChannelRead(msg);
+        }
     }
 
     @Override

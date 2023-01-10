@@ -56,8 +56,9 @@ public class LoginAuthRespHandler extends ChannelInboundHandlerAdapter {
                 }
                 loginResp = isOK ? buildResponse((byte) 0)
                         : buildResponse((byte) -1);
-                if (isOK)
+                if (isOK) {
                     nodeCheck.put(nodeIndex, true);
+                }
             }
             LOG.info("The login response is : " + loginResp
                     + " body [" + loginResp.getBody() + "]");

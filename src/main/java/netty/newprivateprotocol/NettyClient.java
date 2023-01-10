@@ -16,9 +16,12 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class NettyClient {
+
+    AtomicInteger count = new AtomicInteger();
 
     private static final Log LOG = LogFactory.getLog(NettyClient.class);
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
@@ -67,6 +70,13 @@ public class NettyClient {
             // 所有资源释放完成之后，清空资源，再次发起重连操作
             executor.execute(() -> {
                 try {
+                    // 如果重试次数超过5次则停止重试
+                    if (count.get() >= 5) {
+                        group.shutdownGracefully();
+                        executor.shutdownNow();
+                        return;
+                    }
+                    count.set(count.get() + 1);
                     TimeUnit.SECONDS.sleep(1);
                     try {
                         // 发起重连操作
