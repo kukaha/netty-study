@@ -54,8 +54,9 @@ public class NettyMessageEncoder extends MessageToByteEncoder<NettyMessage> {
 
         if (msg.getBody() != null) {
             marshallingEncoder.encode(msg.getBody(), sendBuf);
-        } else
+        } else {
             sendBuf.writeInt(0);
+        }
         // 之前写了crcCode 4bytes，除去crcCode和length 8 bytes即为更新之后的字节
         sendBuf.setInt(4, sendBuf.readableBytes() - 8);
     }
